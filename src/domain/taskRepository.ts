@@ -1,5 +1,3 @@
-// src/domain/taskRepository.ts
-
 import { Task } from "./task";
 
 export interface TaskRepository {

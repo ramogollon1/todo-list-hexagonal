@@ -1,7 +1,5 @@
-// src/infrastructure/taskRepositoryInMemory.ts
-
-import { Task } from "../domain/task";
-import { TaskRepository } from "../domain/taskRepository";
+import { Task } from "@domain/task";
+import { TaskRepository } from "@domain/taskRepository";
 
 export class TaskRepositoryInMemory implements TaskRepository {
   private tasks: Task[] = [];
@@ -13,6 +11,7 @@ export class TaskRepositoryInMemory implements TaskRepository {
   async create(task: Task): Promise<Task> {
     const newTask = { ...task, id: String(this.tasks.length + 1) };
     this.tasks.push(newTask);
+    console.log("this.tasks", this.tasks);
     return newTask;
   }
 

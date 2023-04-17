@@ -1,6 +1,8 @@
 import React from "react";
-import { Task } from "../domain/task";
+import { Task } from "@domain/task";
 import styled from "styled-components";
+import { v4 as v4uuid } from "uuid";
+import ListItem from "@screens/todolist/components/ListItem";
 
 const Container = styled.div`
   display: flex;
@@ -10,12 +12,17 @@ const Container = styled.div`
   height: 100vh;
 `;
 
-type Props = {
+type TodoListProps = {
   tasks: Task[];
   onTaskAdded: (task: Task) => void;
+  onTaskDeleted: (taskId: string) => void;
 };
 
-const TodoList: React.FC<Props> = ({ tasks, onTaskAdded }) => {
+const TodoList: React.FC<TodoListProps> = ({
+  tasks,
+  onTaskAdded,
+  onTaskDeleted,
+}) => {
   const [newTaskName, setNewTaskName] = React.useState("");
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,7 +30,7 @@ const TodoList: React.FC<Props> = ({ tasks, onTaskAdded }) => {
 
     if (newTaskName.trim()) {
       const newTask: Task = {
-        id: Date.now(),
+        id: v4uuid(),
         name: newTaskName,
         completed: false,
       };
@@ -31,12 +38,6 @@ const TodoList: React.FC<Props> = ({ tasks, onTaskAdded }) => {
       setNewTaskName("");
     }
   };
-
-  function handleTaskDeleted(taskId: string) {
-    setNewTaskName((prevTasks) =>
-      prevTasks.filter((task) => task.id !== taskId)
-    );
-  }
 
   return (
     <Container>
@@ -52,11 +53,7 @@ const TodoList: React.FC<Props> = ({ tasks, onTaskAdded }) => {
       </form>
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>
-            <input type="checkbox" checked={task.completed} />
-            {task.name}
-            <button onClick={() => onTaskDeleted(task.id)}>Eliminar</button>
-          </li>
+          <ListItem key={task.id} task={task} onTaskDeleted={onTaskDeleted} />
         ))}
       </ul>
     </Container>
